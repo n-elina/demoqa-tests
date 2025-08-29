@@ -1,11 +1,9 @@
 from selene import browser, have, command
 from demoqa_tests import resource
+from demoqa_tests.data.user import User
 
 
 class RegistrationPage:
-
-    # def __init__(self):
-    #     self.registered_user_data = browser.element('.table').all('td').even
 
     def open(self):
         browser.open('/automation-practice-form')
@@ -78,37 +76,35 @@ class RegistrationPage:
     def click_submit_button(self, name):
         browser.element(name).perform(command.js.click)
 
-    # Аннотация @property используется, чтобы вызвать метод без аргументов (см. ниже), не используя скобки - registered_user_data
-    @property
-    def registered_user_data(self):
-        return browser.element('.table').all('td').even
+    def user_registration(self, user: User):
+        (
+            self.fill_first_name(user.first_name)
+            .fill_last_name(user.last_name)
+            .fill_email(user.email)
+            .choose_gender(user.gender)
+            .fill_phone_number(user.phone_number)
+            .fill_date_of_birth(user.year, user.month, user.day)
+            .choose_subject(user.subject)
+            .choose_hobby(user.hobby)
+            .upload_photo(user.photo)
+            .fill_address(user.address)
+            .choose_state(user.state)
+            .choose_city(user.city)
+            .click_submit_button('#submit')
+        )
 
-    # def should_have_registered_user_with(
-    #     self,
-    #     first_name,
-    #     last_name,
-    #     email,
-    #     gender,
-    #     phone_number,
-    #     date_of_birth,
-    #     subject,
-    #     hobby,
-    #     photo,
-    #     address,
-    #     state,
-    #     city
-    # ):
-    #     browser.element('.table').all('td').even.should(
-    #         have.exact_texts(
-    #             f'{first_name} {last_name}',
-    #             email,
-    #             gender,
-    #             phone_number,
-    #             date_of_birth,
-    #             subject,
-    #             hobby,
-    #             photo,
-    #             address,
-    #             f'{state} {city}'
-    #         )
-    #     )
+    def registered_user_should_have_data(self, user: User):
+        browser.element('.table').all('td').even.should(
+            have.exact_texts(
+                f'{user.first_name} {user.last_name}',
+                user.email,
+                user.gender,
+                user.phone_number,
+                f'{user.day} {user.month},{user.year}',
+                user.subject,
+                user.hobby,
+                user.photo,
+                user.address,
+                f'{user.state} {user.city}',
+            )
+        )
