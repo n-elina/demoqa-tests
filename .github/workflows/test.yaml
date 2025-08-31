@@ -3,7 +3,7 @@ name: Test
 on:
   push:
     branches:
-      - "main"
+      - "high-level-step-objects"
 jobs:
   test:
     name: Test
