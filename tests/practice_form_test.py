@@ -2,7 +2,7 @@ from selene import have
 from demoqa_tests.pages.registration_page import RegistrationPage
 
 
-def test_student_registration_form():
+def test_student_registration_form(setup_browser):
     registration_page = RegistrationPage()
     registration_page.open()
 
