@@ -63,7 +63,7 @@ def test_no_labels():
 
 
 def test_dynamic_labels():
-    # Разметка больше для программирования, например, с уловием if...
+    # Разметка больше для программирования, например, с условием if...
     allure.dynamic.tag("web")
     allure.dynamic.severity(Severity.BLOCKER)
     allure.dynamic.feature("Задачи в репозитории")
