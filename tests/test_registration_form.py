@@ -1,5 +1,5 @@
 import allure
-from selene import have, by
+from selene import have, by, command
 
 
 @allure.title("Successful fill form")
@@ -13,8 +13,10 @@ def test_successful(setup_browser):
         browser.element(".practice-form-wrapper").should(
             have.text("Student Registration Form")
         )
-        browser.driver.execute_script("$('footer').remove()")
-        browser.driver.execute_script("$('#fixedban').remove()")
+        browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).wait_until(
+            have.size_greater_than_or_equal(2)
+        )
+        browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
 
     with allure.step("Fill form"):
         browser.element("#firstName").set_value(first_name)
@@ -28,7 +30,9 @@ def test_successful(setup_browser):
         # browser.element(".react-datepicker__day--030:not(.react-datepicker__day--outside-month)").click()
         browser.element("#subjectsInput").send_keys("Maths")
         browser.element("#subjectsInput").press_enter()
-        browser.element("#hobbiesWrapper").element(by.text("Sports")).click()
+        browser.element("#hobbiesWrapper").element(by.text("Sports")).perform(
+            command.js.scroll_into_view
+        ).click()
         # browser.element("#uploadPicture").uploadFromClasspath("img/1.png")
         browser.element("#currentAddress").set_value("Some street 1")
         browser.element("#state").click()
