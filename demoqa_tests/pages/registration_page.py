@@ -9,7 +9,7 @@ class RegistrationPage:
         self.browser = browser
 
     def open(self):
-        self.browser.open('https://demoqa.com/automation-practice-form')
+        self.browser.open('/automation-practice-form')
         self.browser.all('[id^=google_ads][id$=container__]').with_(
             timeout=10
         ).wait_until(have.size_greater_than_or_equal(2))
