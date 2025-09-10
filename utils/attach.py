@@ -1,4 +1,5 @@
 import allure
+import requests
 from allure_commons.types import AttachmentType
 
 
@@ -12,9 +13,17 @@ def add_screenshot(browser):
     )
 
 
+# Не работает, так как в селеноиде нет метода get_log
+# def add_logs(browser):
+#     log = "".join(f'{text}\n' for text in browser.driver.get_log(log_type='browser'))
+#     allure.attach(log, 'browser_logs', AttachmentType.TEXT, '.log')
+
+
 def add_logs(browser):
-    log = "".join(f'{text}\n' for text in browser.driver.get_log(log_type='browser'))
-    allure.attach(log, 'browser_logs', AttachmentType.TEXT, '.log')
+    session_id = browser.driver.session_id
+    url = f"https://selenoid.autotests.cloud/logs/{session_id}.log"
+    response = requests.get(url)
+    allure.attach(response.text, 'browser_logs', AttachmentType.TEXT, '.log')
 
 
 def add_html(browser):
