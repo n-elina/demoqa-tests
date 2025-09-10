@@ -1,14 +1,13 @@
 import allure
-import json
-from allure import attachment_type
 from allure_commons.types import Severity
 from demoqa_tests.data.user import kos
 from demoqa_tests.pages.registration_page import RegistrationPage
+from tests.conftest import setup_browser
 
 
-def test_student_registration_form():
+def test_student_registration_form(setup_browser):
     with allure.step('Открываем страницу регистрации'):
-        registration_page = RegistrationPage()
+        registration_page = RegistrationPage(setup_browser)
         registration_page.open()
 
     # WHEN
@@ -22,40 +21,25 @@ def test_student_registration_form():
         registration_page.registered_user_should_have_data(kos)
 
 
-registration_page = RegistrationPage()
-
-
-def test_student_registration_with_decorator_steps():
-    open_registration_page()
-    registration_user_Kos()
-    user_Kos_should_have_data()
+def test_student_registration_with_decorator_steps(setup_browser):
+    open_registration_page(setup_browser)
+    registration_user_Kos(setup_browser)
+    user_Kos_should_have_data(setup_browser)
 
 
 @allure.step('Открываем страницу регистрации')
-def open_registration_page():
-    registration_page.open()
+def open_registration_page(browser):
+    RegistrationPage(browser).open()
 
 
 @allure.step('Регистрация пользователя Kos')
-def registration_user_Kos():
-    registration_page.user_registration(kos)
+def registration_user_Kos(browser):
+    RegistrationPage(browser).user_registration(kos)
 
 
 @allure.step('Проверяем, что пользователь Kos зарегистрировался с корректными данными')
-def user_Kos_should_have_data():
-    registration_page.registered_user_should_have_data(kos)
-
-
-def test_attachments():
-    allure.attach("Text content", name="Text", attachment_type=attachment_type.TEXT)
-    allure.attach(
-        "<h1>Hello, world</h1>", name="Html", attachment_type=attachment_type.HTML
-    )
-    allure.attach(
-        json.dumps({"first": 1, "second": 2}),
-        name="Json",
-        attachment_type=attachment_type.JSON,
-    )
+def user_Kos_should_have_data(browser):
+    RegistrationPage(browser).registered_user_should_have_data(kos)
 
 
 def test_no_labels():
