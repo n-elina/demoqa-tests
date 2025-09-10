@@ -24,9 +24,7 @@ def add_logs(browser):
     selenoid_url = "https://selenoid.autotests.cloud"  # без /wd/hub
     log_url = f"{selenoid_url}/logs/{session_id}.log"
 
-    response = requests.get(
-        log_url, auth=("user1", "1234")
-    )
+    response = requests.get(log_url, auth=("user1", "1234"))
     if response.status_code == 200:
         allure.attach(
             response.text, name="browser_logs", attachment_type=AttachmentType.TEXT
