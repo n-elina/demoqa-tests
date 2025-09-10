@@ -21,9 +21,22 @@ def add_screenshot(browser):
 
 def add_logs(browser):
     session_id = browser.driver.session_id
-    url = f"https://selenoid.autotests.cloud/logs/{session_id}.log"
-    response = requests.get(url)
-    allure.attach(response.text, 'browser_logs', AttachmentType.TEXT, '.log')
+    selenoid_url = "https://selenoid.autotests.cloud"  # без /wd/hub
+    log_url = f"{selenoid_url}/logs/{session_id}.log"
+
+    response = requests.get(
+        log_url, auth=("user1", "1234")
+    )
+    if response.status_code == 200:
+        allure.attach(
+            response.text, name="browser_logs", attachment_type=AttachmentType.TEXT
+        )
+    else:
+        allure.attach(
+            f"Не удалось получить логи. Код ответа: {response.status_code}",
+            name="browser_logs",
+            attachment_type=AttachmentType.TEXT,
+        )
 
 
 def add_html(browser):
